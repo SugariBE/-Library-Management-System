@@ -1,0 +1,88 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 1. Book class to store the book details
+class Book {
+public:
+    string title;
+    string author;
+    int id;
+
+    Book(string t, string a, int i) : title(t), author(a), id(i) {}
+};
+
+// 2. Node class for linked list
+class Node {
+public:
+    Book* book;     // Pointer to Book object
+    Node* next;     // Pointer to the next Node
+
+    Node(Book* b) : book(b), next(nullptr) {}
+};
+
+// 3. Library class to manage the list of books
+class Library {
+private:
+    Node* head;  // Head pointer of the linked list
+
+public:
+    Library() : head(nullptr) {}
+
+    // Add a book to the library (at the beginning of the linked list)
+    void addBook(string title, string author, int id) {
+        Book* newBook = new Book(title, author, id);
+        Node* newNode = new Node(newBook);
+        newNode->next = head;
+        head = newNode;
+        cout << "Book added: " << title << " by " << author << endl;
+    }
+
+    // Search for a book by ID
+    Book* searchById(int id) {
+        Node* current = head;
+        while (current != nullptr) {
+            if (current->book->id == id) {
+                return current->book;
+            }
+            current = current->next;
+        }
+        return nullptr;  // Book not found
+    }
+
+    // Print all books in the library
+    void printAllBooks() {
+        Node* current = head;
+        while (current != nullptr) {
+            cout << "ID: " << current->book->id
+                 << ", Title: " << current->book->title
+                 << ", Author: " << current->book->author << endl;
+            current = current->next;
+        }
+    }
+};
+
+int main() {
+    Library library;
+
+    // Adding books
+    library.addBook("The Catcher in the Rye", "J.D. Salinger", 1);
+    library.addBook("To Kill a Mockingbird", "Harper Lee", 2);
+    library.addBook("1984", "George Orwell", 3);
+
+    // Searching for a book by ID
+    int searchId = 2;
+    Book* foundBook = library.searchById(searchId);
+    if (foundBook) {
+        cout << "Found Book: " << foundBook->title
+             << " by " << foundBook->author << endl;
+    } else {
+        cout << "Book with ID " << searchId << " not found!" << endl;
+    }
+
+    // Printing all books
+    cout << "\nAll Books in Library:\n";
+    library.printAllBooks();
+
+    return 0;
+}
